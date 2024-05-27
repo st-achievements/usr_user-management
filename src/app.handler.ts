@@ -1,15 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { EventarcService } from '@st-achievements/core';
-import {
-  DATABASE_CONNECTION_STRING,
-  Drizzle,
-  usr,
-} from '@st-achievements/database';
+import { Drizzle, usr } from '@st-achievements/database';
 import { getCorrelationId } from '@st-api/core';
 import { Logger } from '@st-api/firebase';
 import { eq } from 'drizzle-orm';
 import { auth } from 'firebase-admin';
-import { EventContext, runWith } from 'firebase-functions';
+import { EventContext } from 'firebase-functions';
 
 import { USER_CREATED_EVENT } from './app.constants.js';
 import { UserCreatedDto } from './user-created.dto.js';
@@ -24,8 +20,8 @@ export class AppHandler {
   private readonly logger = Logger.create(this);
 
   private parseName(user: auth.UserRecord): string {
-    const name = user.displayName ?? user.email?.split('@').at(0);
-    return name?.slice(0, 255) ?? user.uid;
+    const name = user.displayName || user.email?.split('@').at(0);
+    return name?.slice(0, 255) || user.uid;
   }
 
   async handle(user: auth.UserRecord, context: EventContext): Promise<void> {
@@ -68,6 +64,9 @@ export class AppHandler {
         active: !user.disabled,
         metadata: {
           correlationId: getCorrelationId(),
+          'firebase.displayName': user.displayName || null,
+          'firebase.email': user.email || null,
+          'firebase.phoneNumber': user.phoneNumber || null,
         },
       })
       .returning();
