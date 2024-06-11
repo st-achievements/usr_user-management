@@ -38,7 +38,9 @@ const app = StFirebaseApp.create(AppModule, {
     }),
 );
 
-export const usr_creator = {
-  http: app.getHttpHandler(),
-  events: app.getCloudEventHandlers(),
+export const usr_user = {
+  creator: {
+    http: app.getHttpHandler(),
+    events: app.getCloudEventHandlers(),
+  },
 };
