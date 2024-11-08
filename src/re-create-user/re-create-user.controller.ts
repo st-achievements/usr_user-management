@@ -24,6 +24,8 @@ import {
 } from '../exceptions.js';
 import { StatusCodes } from 'http-status-codes';
 
+// TODO add check for ADMIN
+
 @Exceptions([USER_NOT_FOUND, USER_IS_NOT_INACTIVE, EMAIL_IS_REQUIRED])
 @ZRes(ReCreateUserEventDto, StatusCodes.CREATED)
 @Controller({

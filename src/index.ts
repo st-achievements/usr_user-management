@@ -14,6 +14,7 @@ const app = StFirebaseApp.create({
   controllers: [ReCreateUserController],
   providers: [UserCreationHandler, UserDeletionHandler],
 })
+  .withHttpHandler()
   .addCustomEvent(
     'User creation',
     createUserHandler('onCreate', UserCreationHandler),
